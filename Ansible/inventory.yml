@@ -2,4 +2,8 @@
 # or
 # Public/Private IP of Server
 
-167.71.180.248 
+---
+all:
+  hosts:
+    web:
+      ansible_host: 167.71.180.248
