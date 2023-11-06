@@ -1,0 +1,33 @@
+---
+- hosts: all
+  become: yes ### means if you are using a normal user it becomes a sudo
+  vars: 
+   server_name: "blogcamp.online"
+   document_root: /var/www
+   app_root: myapp
+  tasks:
+   - name: Update apt cache and install Nginx
+     apt:
+       name: Nginx
+       state: latest
+       update_cache: yes
+   
+   - name : Copy website files to server's document root
+     copy:
+       src: "{{ app_root }}"
+       dest: "{{ document_root }}"
+       mode: preserve
+
+   - name : Apply Nginx template
+     template:
+      src: nginix.conf.j2
+      dest:/etc/nginx/sites-available/default
+     notify: Restart Nginx
+
+   - name: Enable new site
+     file:
+      src:/etc/nginx/sites-available/default
+      dest: /etc/nginx/sites-enabled/default
+      state: link
+     notify: Restart8
+
