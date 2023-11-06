@@ -26,8 +26,19 @@
 
    - name: Enable new site
      file:
-      src:/etc/nginx/sites-available/default
+      src: /etc/nginx/sites-available/default
       dest: /etc/nginx/sites-enabled/default
       state: link
-     notify: Restart8
+     notify: Restart Nginx
 
+   - name: Enable new site
+    ufw:
+     rule: allow
+     port: '80'
+     proto: tcp
+  
+  handlers:
+   - name : Restart Nginx
+     service:
+      name: nginix
+      state: restarted
